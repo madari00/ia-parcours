@@ -1,0 +1,58 @@
+{
+  "modele_retenu": "logistique",
+  "seuil": 0.52,
+  "resultats": [
+    {
+      "modele": "logistique",
+      "roc_auc": 0.7145,
+      "pr_auc": 0.4283,
+      "seuil": 0.52,
+      "rappel": 0.6364,
+      "precision": 0.3827,
+      "vrais_positifs": 168,
+      "faux_positifs": 271,
+      "faux_negatifs": 96,
+      "vrais_negatifs": 665
+    },
+    {
+      "modele": "random_forest",
+      "roc_auc": 0.705,
+      "pr_auc": 0.4274,
+      "seuil": 0.38,
+      "rappel": 0.6174,
+      "precision": 0.3739,
+      "vrais_positifs": 163,
+      "faux_positifs": 273,
+      "faux_negatifs": 101,
+      "vrais_negatifs": 663
+    }
+  ],
+  "par_ville": {
+    "Banfora": {
+      "n": 122,
+      "roc_auc": 0.678,
+      "taux_defaut": 0.197
+    },
+    "Bobo-Dioulasso": {
+      "n": 305,
+      "roc_auc": 0.723,
+      "taux_defaut": 0.223
+    },
+    "Koudougou": {
+      "n": 139,
+      "roc_auc": 0.714,
+      "taux_defaut": 0.237
+    },
+    "Ouagadougou": {
+      "n": 507,
+      "roc_auc": 0.746,
+      "taux_defaut": 0.217
+    },
+    "Ouahigouya": {
+      "n": 127,
+      "roc_auc": 0.624,
+      "taux_defaut": 0.228
+    }
+  },
+  "taux_defaut": 0.2202
+}

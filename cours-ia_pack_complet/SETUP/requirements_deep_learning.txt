@@ -1,0 +1,13 @@
+# PHASE 3 — Deep Learning (semaines 27 à 39)
+# ⚠️ 2 Go de téléchargement : à lancer quand ta connexion est bonne.
+# La version CPU suffit pour apprendre ; utilise Colab pour les gros entraînements.
+#
+# Installation recommandée (CPU) :
+#   pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
+torch>=2.2
+torchvision>=0.17
+transformers>=4.40
+datasets>=2.19
+sentence-transformers>=2.7
+accelerate>=0.30
+streamlit>=1.33

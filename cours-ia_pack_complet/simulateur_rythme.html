@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Combien de temps ? — Simulateur de rythme</title>
+<style>
+  :root { --bg:#0b1120; --card:#131c31; --card2:#182338; --txt:#e8eefc; --muted:#93a4c4;
+          --acc:#4f9cf9; --ok:#34d399; --warn:#fbbf24; --line:#243352; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:linear-gradient(180deg,#0b1120,#0e1730 55%,#0b1120); color:var(--txt);
+         font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; line-height:1.55; }
+  .wrap { max-width:1040px; margin:0 auto; padding:26px 18px 70px; }
+  header { border-bottom:1px solid var(--line); padding-bottom:20px; margin-bottom:24px; }
+  h1 { font-size:clamp(1.4rem,3.2vw,2rem); margin:0 0 8px; letter-spacing:-.02em; }
+  .sub { color:var(--muted); font-size:.95rem; }
+  .badges { display:flex; flex-wrap:wrap; gap:8px; margin-top:13px; }
+  .badge { background:var(--card2); border:1px solid var(--line); color:var(--muted);
+           padding:5px 11px; border-radius:999px; font-size:.79rem; }
+  h2 { font-size:1.12rem; margin:30px 0 8px; display:flex; align-items:center; gap:9px; }
+  .dot { width:10px; height:10px; border-radius:50%; flex:none; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:16px 18px; }
+  .simu { background:var(--card); border:1px solid #2b4272; border-radius:16px; padding:20px 22px; margin-top:14px; }
+  .slider-row { display:flex; align-items:center; gap:16px; flex-wrap:wrap; }
+  input[type=range] { flex:1; min-width:220px; accent-color:var(--acc); height:26px; }
+  .big { font-size:2rem; font-weight:700; color:#fff; min-width:120px; }
+  .out { display:grid; grid-template-columns:repeat(auto-fit,minmax(165px,1fr)); gap:12px; margin-top:18px; }
+  .box { background:var(--card2); border:1px solid var(--line); border-radius:12px; padding:12px 14px; }
+  .box .k { color:var(--muted); font-size:.78rem; text-transform:uppercase; letter-spacing:.04em; }
+  .box .v { font-size:1.22rem; font-weight:700; margin-top:3px; }
+  .box .d { color:var(--muted); font-size:.78rem; margin-top:2px; }
+  table { width:100%; border-collapse:collapse; margin-top:14px; font-size:.89rem; }
+  th, td { text-align:left; padding:9px 10px; border-bottom:1px solid var(--line); }
+  th { color:var(--muted); font-weight:600; font-size:.8rem; text-transform:uppercase; letter-spacing:.04em; }
+  tbody tr:hover { background:#182338; }
+  tr.hl { background:#14263f; }
+  td.num { font-variant-numeric:tabular-nums; font-weight:600; }
+  .j { display:flex; gap:14px; padding:11px 0; border-bottom:1px dashed var(--line); align-items:flex-start; }
+  .j:last-child { border-bottom:none; }
+  .j .h { min-width:78px; flex:none; font-weight:700; color:#cfe3ff; font-size:.86rem; }
+  .j .c { font-size:.88rem; }
+  .j .c small { color:var(--muted); display:block; margin-top:2px; }
+  .note { background:#14213b; border-left:3px solid var(--acc); padding:11px 14px; border-radius:8px;
+          font-size:.86rem; color:#cfe0ff; margin-top:16px; }
+  .warnbox { background:#2a2113; border-left:3px solid var(--warn); padding:11px 14px; border-radius:8px;
+             font-size:.86rem; color:#ffe9b8; margin-top:12px; }
+  ul { margin:8px 0 0; padding-left:20px; color:var(--muted); font-size:.88rem; }
+  li { margin-bottom:5px; }
+  footer { margin-top:38px; color:var(--muted); font-size:.8rem; border-top:1px solid var(--line); padding-top:16px; }
+  b.hl { color:#fff; }
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <h1>⏱️ Combien de temps pour apprendre tout ça ?</h1>
+  <div class="sub">Simulateur basé sur la charge réelle du pack : 26 chapitres, 6 notebooks, 4 projets dont 2 déjà assemblés et testés.</div>
+  <div class="badges">
+    <span class="badge"><b>380 h</b> de programme complet</span>
+    <span class="badge">4 phases · 4 jalons</span>
+    <span class="badge">Employable dès ~180 h (test technique junior)</span>
+    <span class="badge">En ligne de mire : 12-18 mois depuis le 15/10/2026</span>
+  </div>
+</header>
+
+<h2><span class="dot" style="background:#4f9cf9"></span>Ton simulateur</h2>
+<div class="simu">
+  <div class="slider-row">
+    <div>
+      <div class="k" style="color:var(--muted);font-size:.78rem;text-transform:uppercase;letter-spacing:.04em">Heures par semaine</div>
+      <div class="big" id="valH">7 h</div>
+    </div>
+    <input type="range" id="slider" min="3" max="40" step="1" value="7">
+  </div>
+  <div class="out">
+    <div class="box"><div class="k">Durée du programme</div><div class="v" id="duree">—</div><div class="d">380 heures au total</div></div>
+    <div class="box"><div class="k">Fin du programme</div><div class="v" id="fin">—</div><div class="d" id="finDans">—</div></div>
+    <div class="box"><div class="k">Candidatures possibles dès</div><div class="v" id="cand">—</div><div class="d">après le jalon 3 (275 h)</div></div>
+    <div class="box"><div class="k">Ton rythme actuel</div><div class="v" id="verdict">—</div><div class="d" id="verdictD">—</div></div>
+  </div>
+  <div id="alerte"></div>
+</div>
+
+<h2><span class="dot" style="background:#a78bfa"></span>Les 4 jalons et ce qu'ils débloquent</h2>
+<div class="card" style="margin-top:12px">
+  <div class="j"><span class="h">85 h</span><span class="c"><b class="hl">Fin T1 — Fondations</b>
+    <small>Python solide, données, maths de l'IA. → Tu peux faire un stage ou un poste de data analyst junior, et commencer à facturer en freelance.</small></span></div>
+  <div class="j"><span class="h">180 h</span><span class="c"><b class="hl">Fin T2 — Machine Learning</b> ⭐ <em>seuil d'employabilité minimal</em>
+    <small>Workflow ML complet, évaluation honnête, projets. → Tu passes un test technique junior et tu sais le justifier. C'est ici que la plupart des candidats deviennent crédibles.</small></span></div>
+  <div class="j"><span class="h">275 h</span><span class="c"><b class="hl">Fin T3 — Deep Learning</b>
+    <small>PyTorch, CNN, Transformers, fine-tuning. → Profil ML/vision engineer junior. Tu peux commencer à postuler sérieusement.</small></span></div>
+  <div class="j"><span class="h">380 h</span><span class="c"><b class="hl">Fin T4 — LLM, RAG, MLOps, déploiement</b>
+    <small>Application RAG en ligne, API dockerisée, portfolio de 4 projets. → Profil « junior IA appliquée » complet sur le marché francophone.</small></span></div>
+</div>
+
+<h2><span class="dot" style="background:#34d399"></span>Table des rythmes (repères)</h2>
+<div class="card" style="margin-top:12px;overflow-x:auto">
+<table>
+  <thead><tr><th>Rythme</th><th>Durée</th><th>Fin du programme</th><th>Tu peux postuler dès</th><th>Réaliste ?</th></tr></thead>
+  <tbody id="tableau"></tbody>
+</table>
+</div>
+
+<div class="warnbox">
+  <b>En dessous de 4 h/semaine</b>, tu n'avances plus : tu oublies presque aussi vite que tu apprends (la révision espacée est le facteur limitant, pas l'intelligence).
+  <b>Au-dessus de 25 h/semaine</b>, la courbe de rendement s'aplatit : six heures par jour sur du nouveau matériel, la rétention chute. Mieux vaut 20 h tenues 5 mois que 35 h tenues 3 semaines.
+</div>
+
+<h2><span class="dot" style="color:#f472b6;background:#f472b6"></span>Ce que le compteur ne mesure pas</h2>
+<div class="card" style="margin-top:12px">
+  <ul>
+    <li><b class="hl">La recherche d'emploi ajoute 3 à 6 mois.</b> Le programme te rend compétent ; il ne déclenche pas les entretiens. Prévois la période de candidatures (50-100 envois) comme une phase à part entière.</li>
+    <li><b class="hl">L'anglais technique se travaille en continu</b>, 20-30 min/jour en parallèle — pas après. Impossible de le rattraper en fin de parcours.</li>
+    <li><b class="hl">Sa capacité réelle ≠ sa capacité annoncée.</b> Un rythme de 7 h/semaine suppose 7 h réellement travaillées. Compte 15-20 % de perte (fatigue, coupures, imprévus) : ajoute donc 2 mois de marge sur 12.</li>
+    <li><b class="hl">Après le programme, on continue d'apprendre.</b> C'est le métier : 3-5 h/semaine à vie pour suivre les évolutions. Le pack n'est pas un examen qu'on passe, c'est une base qu'on entretient.</li>
+    <li><b class="hl">Le niveau « comme les diplômés là-bas » ne vient pas des heures de cours</b>, mais des heures d'apprentissage sur des projets réels. C'est pourquoi le pack mise sur 4 projets et non sur 4 certificats.</li>
+  </ul>
+</div>
+
+<div class="note">
+  <b>La seule accélération qui marche :</b> ne pas redémarrer un cours. Chaque fois que tu changes de programme, tu reperds 3-4 semaines sur les bases. Ce pack t'en fait gagner 2 à 3 : les deux projets sont déjà écrits, testés et mesurés — tu apprends donc en modifiant du code réel plutôt qu'en repartant d'une page blanche.
+</div>
+
+<footer>
+  Estimation basée sur la charge du pack « Devenir pro de l'IA » : 85 h (fondations) + 95 h (machine learning) + 95 h (deep learning) + 105 h (LLM, RAG, MLOps, déploiement, carrière).
+  Le calcul suppose une date de départ au 15/10/2026 et une assiduité réelle. Ouvre ce fichier dans ton navigateur pour que tes réglages restent actifs pendant la session.
+</footer>
+</div>
+
+<script>
+var DEBUT = new Date(2026, 9, 15);           // 15 octobre 2026
+var TOTAL = 380, JALON2 = 180, JALON3 = 275;
+var MOIS = 4.345;
+
+function fmtDate(d) {
+  return d.toLocaleDateString("fr-FR", { day: "2-digit", month: "long", year: "numeric" });
+}
+function dureeEnMois(heures, parSemaine) { return heures / parSemaine / MOIS; }
+function moisEtSemaines(m) {
+  var mois = Math.floor(m), reste = m - mois;
+  var sem = Math.round(reste * MOIS);
+  if (mois === 0) return sem + " sem.";
+  if (sem === 0) return mois + " mois";
+  return mois + " mois " + sem + " sem.";
+}
+function ajouteSemaines(h, parSemaine) {
+  var d = new Date(DEBUT.getTime());
+  d.setDate(d.getDate() + Math.round(h / parSemaine * 7));
+  return d;
+}
+
+function calculer() {
+  var h = parseInt(document.getElementById("slider").value, 10);
+  document.getElementById("valH").textContent = h + " h";
+  try { localStorage.setItem("ia_rythme", h); } catch (e) {}
+
+  var mois = dureeEnMois(TOTAL, h);
+  document.getElementById("duree").textContent = moisEtSemaines(mois);
+
+  var fin = ajouteSemaines(TOTAL, h);
+  document.getElementById("fin").textContent = fmtDate(fin);
+  document.getElementById("finDans").textContent = "dans " + moisEtSemaines(mois) + " à partir du 15/10/2026";
+
+  var cand = ajouteSemaines(JALON3, h);
+  document.getElementById("cand").textContent = fmtDate(cand);
+
+  var v = document.getElementById("verdict"), vd = document.getElementById("verdictD");
+  if (h < 4) { v.textContent = "trop lent"; vd.textContent = "risque de tout oublier"; v.style.color = "#f87171"; }
+  else if (h <= 6) { v.textContent = "lent mais sûr"; vd.textContent = "c'est tenable dans la durée"; v.style.color = "#fbbf24"; }
+  else if (h <= 12) { v.textContent = "optimal"; vd.textContent = "le meilleur rapport vitesse / rétention"; v.style.color = "#34d399"; }
+  else if (h <= 25) { v.textContent = "rapide"; vd.textContent = "exigeant : prévois des pauses"; v.style.color = "#7dd3fc"; }
+  else { v.textContent = "intense"; vd.textContent = "rendement décroissant au-delà"; v.style.color = "#f87171"; }
+
+  var a = document.getElementById("alerte");
+  if (h >= 20) {
+    a.innerHTML = '<div class="warnbox">À ce rythme, tu finis en moins de 5 mois — mais compte au moins une semaine de pause par mois et supervise tes révisions, sinon tu confondras vitesse et maîtrise.</div>';
+  } else if (h < 4) {
+    a.innerHTML = '<div class="warnbox">À ce rythme, mieux vaut viser 1 h par jour que 4 h le samedi : la régularité est le facteur déterminant de la rétention.</div>';
+  } else { a.innerHTML = ""; }
+
+  construireTableau(h);
+}
+
+function construireTableau(actuel) {
+  var lignes = [
+    [3, "très lent", "sûr, mais attention à la rétention"],
+    [5, "lent", "tenable avec un travail à côté"],
+    [7, "plan officiel du pack", "le rythme retenu dans la roadmap 52 semaines"],
+    [10, "soutenu", "excellent compromis"],
+    [15, "intense", "si peu d'obligations à côté"],
+    [20, "quasi temps plein", "possible, mais surveille la fatigue"],
+    [25, "temps plein", "maximum utile"]
+  ];
+  var html = "";
+  lignes.forEach(function (l) {
+    var h = l[0], m = dureeEnMois(TOTAL, h);
+    var fin = ajouteSemaines(TOTAL, h), cand = ajouteSemaines(JALON3, h);
+    html += '<tr' + (h === actuel ? ' class="hl"' : '') + '>' +
+      '<td class="num">' + h + ' h/sem</td>' +
+      '<td>' + moisEtSemaines(m) + '</td>' +
+      '<td>' + fmtDate(fin) + '</td>' +
+      '<td>' + fmtDate(cand) + '</td>' +
+      '<td style="color:#93a4c4">' + l[2] + '</td></tr>';
+  });
+  document.getElementById("tableau").innerHTML = html;
+}
+
+document.getElementById("slider").addEventListener("input", calculer);
+try {
+  var sauve = localStorage.getItem("ia_rythme");
+  if (sauve) document.getElementById("slider").value = sauve;
+} catch (e) {}
+calculer();
+</script>
+</body>
+</html>

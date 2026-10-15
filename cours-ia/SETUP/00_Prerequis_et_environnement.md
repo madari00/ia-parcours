@@ -5,6 +5,11 @@
 
 ---
 
+> 🩺 **Un problème d'installation ?** → **`DEPANNAGE_WINDOWS.md`** traite les erreurs réelles :
+> « git n'est pas reconnu », « running scripts is disabled », Python 3.14 trop récent, `pip` introuvable, dossier dans Téléchargements… avec les commandes exactes à copier.
+
+---
+
 ## 1. Ce que tu as déjà (rien à faire)
 
 | Élément | État | Utilisation dans le parcours |

@@ -1,0 +1,20 @@
+{
+  "python.analysis.typeCheckingMode": "basic",
+  "python.analysis.autoImportCompletions": true,
+  "editor.rulers": [100],
+  "editor.formatOnSave": true,
+  "editor.tabSize": 4,
+  "files.autoSave": "afterDelay",
+  "files.exclude": {
+    "**/__pycache__": true,
+    "**/.pytest_cache": true,
+    "**/.ipynb_checkpoints": true
+  },
+  "notebook.output.textLineLimit": 30,
+  "jupyter.notebookFileRoot": "${workspaceFolder}",
+  "git.autofetch": true,
+  "git.confirmSync": false,
+  "[python]": {
+    "editor.defaultFormatter": "charliermarsh.ruff"
+  }
+}
