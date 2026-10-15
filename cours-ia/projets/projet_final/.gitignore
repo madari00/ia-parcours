@@ -1,0 +1,18 @@
+# Environnements
+.venv/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# Données et modèles lourds (portionnables ou régénérables)
+data/raw/*.csv
+models/*.pkl
+reports/figures/*.png
+
+# Secrets — JAMAIS sur GitHub
+.env
+*.key
+secrets.json
+
+# Système
+.DS_Store

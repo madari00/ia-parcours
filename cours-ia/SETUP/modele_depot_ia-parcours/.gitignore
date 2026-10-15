@@ -1,0 +1,23 @@
+# Environnement Python
+.venv/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.pytest_cache/
+
+# Secrets — JAMAIS sur GitHub
+.env
+*.key
+secrets.json
+
+# Données et modèles lourds (régénérables ou téléchargeables)
+data/raw/*.csv
+data/raw/*.zip
+models/*.pkl
+models/*.pt
+*.h5
+
+# Éditeur
+.vscode/*
+!.vscode/settings.json
+.DS_Store

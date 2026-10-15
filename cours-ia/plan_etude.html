@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Plan d'étude IA — 52 semaines</title>
+<style>
+  :root { --bg:#0b1120; --card:#131c31; --card2:#182338; --txt:#e8eefc; --muted:#93a4c4;
+          --acc:#4f9cf9; --ok:#34d399; --line:#243352; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:linear-gradient(180deg,#0b1120,#0e1730 60%,#0b1120);
+         color:var(--txt); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+         line-height:1.5; }
+  .wrap { max-width:1080px; margin:0 auto; padding:28px 18px 80px; }
+  header { border-bottom:1px solid var(--line); padding-bottom:22px; margin-bottom:26px; }
+  h1 { font-size:clamp(1.5rem,3.4vw,2.2rem); margin:0 0 8px; letter-spacing:-.02em; }
+  .sub { color:var(--muted); font-size:.98rem; }
+  .badges { display:flex; flex-wrap:wrap; gap:8px; margin-top:14px; }
+  .badge { background:var(--card2); border:1px solid var(--line); color:var(--muted);
+           padding:5px 11px; border-radius:999px; font-size:.8rem; }
+  .progress-box { position:sticky; top:0; z-index:10; backdrop-filter:blur(10px);
+                  background:rgba(11,17,32,.93); border-bottom:1px solid var(--line);
+                  padding:14px 0 12px; margin:0 -18px 24px; padding-left:18px; padding-right:18px; }
+  .bar { height:12px; background:#0f1a2e; border:1px solid var(--line); border-radius:999px; overflow:hidden; }
+  .bar > i { display:block; height:100%; width:0%;
+             background:linear-gradient(90deg,#22d3ee,#4f9cf9,#a78bfa); transition:width .3s; }
+  .stat { display:flex; justify-content:space-between; align-items:baseline; gap:12px; font-size:.9rem;
+          color:var(--muted); margin-bottom:8px; flex-wrap:wrap; }
+  .stat b { color:var(--txt); font-size:1rem; }
+  .reset { background:transparent; color:var(--muted); border:1px solid var(--line); border-radius:8px;
+           padding:4px 10px; font-size:.78rem; cursor:pointer; }
+  .reset:hover { color:var(--txt); border-color:var(--acc); }
+  h2 { font-size:1.15rem; margin:34px 0 4px; display:flex; align-items:center; gap:10px; }
+  .dot { width:11px; height:11px; border-radius:50%; flex:none; }
+  .phase-meta { color:var(--muted); font-size:.82rem; margin-left:21px; }
+  .weeks { display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:12px; margin-top:16px; }
+  .week { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:13px 14px;
+          display:flex; gap:12px; align-items:flex-start; transition:.15s; }
+  .week:hover { border-color:#33518a; transform:translateY(-1px); }
+  .week.done { border-color:#1f6b4f; background:#0f2a22; }
+  .week.done .t { text-decoration:line-through; opacity:.72; }
+  .week input { margin-top:4px; width:17px; height:17px; accent-color:var(--ok); flex:none; cursor:pointer; }
+  .t { font-weight:600; font-size:.94rem; }
+  .d { color:var(--muted); font-size:.83rem; margin-top:3px; }
+  .liv { color:#8fd7ff; font-size:.79rem; margin-top:6px; }
+  .grid2 { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:12px; margin-top:16px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:14px 16px; }
+  .card h3 { margin:0 0 6px; font-size:.95rem; }
+  .card p { margin:0; color:var(--muted); font-size:.85rem; }
+  a { color:#79b8ff; text-decoration:none; } a:hover { text-decoration:underline; }
+  .jalon { display:flex; gap:12px; padding:11px 0; border-bottom:1px dashed var(--line); font-size:.88rem; }
+  .jalon:last-child { border-bottom:none; }
+  .jalon b { color:#cfe3ff; min-width:120px; flex:none; }
+  .jalon span { color:var(--muted); }
+  footer { margin-top:44px; color:var(--muted); font-size:.82rem; border-top:1px solid var(--line); padding-top:18px; }
+  .note { background:#14213b; border-left:3px solid var(--acc); padding:11px 14px; border-radius:8px;
+          font-size:.86rem; color:#cfe0ff; margin-top:18px; }
+  @media print { .progress-box{position:static} body{background:#fff;color:#000} .week,.card{background:#fff} }
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <h1>Plan d'étude — Devenir professionnel de l'IA en 52 semaines</h1>
+  <div class="sub">Licence en technologie de génie informatique → profil junior IA appliquée · marché francophone occidental (France · Belgique · Suisse · Québec)</div>
+  <div class="badges">
+    <span class="badge">5-10 h / semaine · ~7 h de rythme cible</span>
+    <span class="badge">4 phases · 26 chapitres</span>
+    <span class="badge">6 notebooks · 1 projet déployé</span>
+    <span class="badge">350-500 heures estimées</span>
+  </div>
+</header>
+
+<div class="progress-box">
+  <div class="stat">
+    <span><b id="pct">0 %</b> du parcours complété — <span id="compte">0 / 52 semaines</span></span>
+    <button class="reset" onclick="resetAll()">Tout réinitialiser</button>
+  </div>
+  <div class="bar"><i id="fill"></i></div>
+</div>
+
+<h2><span class="dot" style="background:#38bdf8"></span>T1 Fondations</h2>
+<div class="phase-meta">Semaines 1-13 · 13 semaines</div>
+<div class="weeks">
+<label class="week"><input type="checkbox" onchange="toggle(this, this.closest('label'))" data-k="ia_w_0_0"><span><span class="t">S1 · Démarrage et méthode</span><div class="d">Lire ch. 0 · créer GitHub + Colab + carnet · choisir le projet fil rouge</div><div class="liv">📦 Dépôt ia-parcours avec README</div></span></label>
+<label class="week"><input type="checkbox" onchange="toggle(this, this.closest('label'))" data-k="ia_w_0_1"><span><span class="t">S2 · Python : bases</span><div class="d">Ch. 1.1-1.4 · variables, conditions, boucles, fonctions</div><div class="liv">📦 3 programmes poussés sur GitHub</div></span></label>
+<label class="week"><input type="checkbox" onchange="toggle(this, this.closest('label'))" data-k="ia_w_0_2"><span><span class="t">S3 · Python : structures et fichiers</span><div class="d">Ch. 1.5-1.7 · listes, dicts, fichiers, erreurs</div><div class="liv">📦 Script lecture CSV → rapport JSON</div></span></label>
+<label class="week"><input type="checkbox" onchange="toggle(this, this.closest('label'))" data-k="ia_w_0_3"><span><span class="t">S4 · Python : classes, modules, Git</span><div class="d">Ch. 1.8-1.9 · classes, import, branches</div><div class="liv">📦 Mini-projet GestionNotes</div></span></label>
+<label class="week"><input type="checkbox" onchange="toggle(this, this.closest('label'))" data-k="ia_w_0_4"><span><span class="t">S5 · NumPy (1/2)</span><div class="d">Ch. 2 · tableaux, shape, indexation</div><div class="liv">📦 notebook 02_numpy</div></span></label>
+<label class="week"><input type="checkbox" onchange="toggle(this, this.closest('label'))" data-k="ia_w_0_5"><span><span class="t">S6 · NumPy (2/2)</span><div class="d">Broadcasting, produit matriciel, normalisation</div><div class="liv">📦 Exercices du ch. 2 terminés</div></span></label>
+<label class="week"><input type="checkbox" onchange="toggle(this, this.closest('label'))" data-k="ia_w_0_6"><span><span class="t">S7 · Pandas (1/2)</span><div class="d">Ch. 3 · chargement, exploration, filtres</div><div class="liv">📦 Choix du dataset réel</div></span></label>
+<label class="week"><input type="checkbox" onchange="toggle(this, this.closest('label'))" data-k="ia_w_0_7"><span><span class="t">S8 · Pandas (2/2)</span><div class="d">Groupby, jointures, valeurs manquantes</div><div class="liv">📦 notebook 02_exploration + 3 graphiques</div></span></label>
+<label class="week"><input type="checkbox" onchange="toggle(this, this.closest('label'))" data-k="ia_w_0_8"><span><span class="t">S9 · Maths 1 : vecteurs et matrices</span><div class="d">Ch. 4 · norme, produit scalaire, similarité cosinus</div><div class="liv">📦 Exercices de calcul vérifiés avec NumPy</div></span></label>
+<label class="week"><input type="checkbox" onchange="toggle(this, this.closest('label'))" data-k="ia_w_0_9"><span><span class="t">S10 · Maths 2 : dérivées et gradient</span><div class="d">Ch. 5 · dérivée, gradient, learning rate</div><div class="liv">📦 notebook 03_gradient avec descente écrite à la main</div></span></label>
+<label class="week"><input type="checkbox" onchange="toggle(this, this.closest('label'))" data-k="ia_w_0_10"><span><span class="t">S11 · Maths 3 : probabilités</span><div class="d">Ch. 6 · Bayes, distributions, biais/variance</div><div class="liv">📦 notebook 04_probas (test médical simulé)</div></span></label>
+<label class="week"><input type="checkbox" onchange="toggle(this, this.closest('label'))" data-k="ia_w_0_11"><span><span class="t">S12 · Statistiques appliquées</span><div class="d">Moyenne vs médiane, corrélation, équité de base</div><div class="liv">📦 Note d'une page sur les probabilités</div></span></label>
+<label class="week"><input type="checkbox" onchange="toggle(this, this.closest('label'))" data-k="ia_w_0_12"><span><span class="t">S13 · Consolidation T1</span><div class="d">Refaire les exercices non terminés · journal de progression</div><div class="liv">📦 🏁 JALON 1 : je code sans tutoriel</div></span></label>
+</div>
+
+<h2><span class="dot" style="background:#a78bfa"></span>T2 Machine Learning</h2>
+<div class="phase-meta">Semaines 14-26 · 13 semaines</div>
+<div class="weeks">
+<label class="week"><input type="checkbox" onchange="toggle(this, this.closest('label'))" data-k="ia_w_1_0"><span><span class="t">S14 · Cadrage de projet</span><div class="d">Ch. 7 · familles de ML, checklist de cadrage</div><div class="liv">📦 cadrage_projet.md complet</div></span></label>
+<label class="week"><input type="checkbox" onchange="toggle(this, this.closest('label'))" data-k="ia_w_1_1"><span><span class="t">S15 · Le workflow ML</span><div class="d">Ch. 8 · split, pipelines, data leakage</div><div class="liv">📦 Squelette de projet réutilisable</div></span></label>
+<label class="week"><input type="checkbox" onchange="toggle(this, this.closest('label'))" data-k="ia_w_1_2"><span><span class="t">S16 · Évaluation honnête</span><div class="d">Ch. 9 · matrice de confusion, précision/rappel, ROC</div><div class="liv">📦 notebook 05_metriques</div></span></label>
+<label class="week"><input type="checkbox" onchange="toggle(this, this.closest('label'))" data-k="ia_w_1_3"><span><span class="t">S17 · Seuils et classes déséquilibrées</span><div class="d">Choix du seuil selon le coût des erreurs</div><div class="liv">📦 Seuil optimal justifié en langage métier</div></span></label>
+<label class="week"><input type="checkbox" onchange="toggle(this, this.closest('label'))" data-k="ia_w_1_4"><span><span class="t">S18 · Modèles simples</span><div class="d">Ch. 10 · linéaire, logistique, kNN, arbre</div><div class="liv">📦 Tableau comparatif en CV 5 folds</div></span></label>
+<label class="week"><input type="checkbox" onchange="toggle(this, this.closest('label'))" data-k="ia_w_1_5"><span><span class="t">S19 · Interprétation des modèles</span><div class="d">Coefficients, règles d'arbre, odds ratio</div><div class="liv">📦 Arbre transcrit en règles « si… alors… »</div></span></label>
+<label class="week"><input type="checkbox" onchange="toggle(this, this.closest('label'))" data-k="ia_w_1_6"><span><span class="t">S20 · Random Forest</span><div class="d">Ch. 11 (1/2) · bagging, oob, importances</div><div class="liv">📦 Modèle RF entraîné et réglé</div></span></label>
+<label class="week"><input type="checkbox" onchange="toggle(this, this.closest('label'))" data-k="ia_w_1_7"><span><span class="t">S21 · Gradient Boosting</span><div class="d">Ch. 11 (2/2) · XGBoost/LightGBM, early stopping</div><div class="liv">📦 Meilleur modèle du T2</div></span></label>
+<label class="week"><input type="checkbox" onchange="toggle(this, this.closest('label'))" data-k="ia_w_1_8"><span><span class="t">S22 · Non supervisé (1/2)</span><div class="d">Ch. 12 · k-means, silhouette, CAH</div><div class="liv">📦 Segments nommés + actions proposées</div></span></label>
+<label class="week"><input type="checkbox" onchange="toggle(this, this.closest('label'))" data-k="ia_w_1_9"><span><span class="t">S23 · Non supervisé (2/2)</span><div class="d">PCA, DBSCAN, détection d'anomalies</div><div class="liv">📦 notebook 06_segmentation</div></span></label>
+<label class="week"><input type="checkbox" onchange="toggle(this, this.closest('label'))" data-k="ia_w_1_10"><span><span class="t">S24 · Projet ML (1/3)</span><div class="d">Ch. 13 · données propres, pipeline, modèle final</div><div class="liv">📦 Modèle sauvegardé (.pkl)</div></span></label>
+<label class="week"><input type="checkbox" onchange="toggle(this, this.closest('label'))" data-k="ia_w_1_11"><span><span class="t">S25 · Projet ML (2/3)</span><div class="d">SHAP, performance par sous-groupe, limites</div><div class="liv">📦 Figures + section limites</div></span></label>
+<label class="week"><input type="checkbox" onchange="toggle(this, this.closest('label'))" data-k="ia_w_1_12"><span><span class="t">S26 · Projet ML (3/3) · 🏁 JALON 2</span><div class="d">README professionnel + rapport 1 page · profil LinkedIn</div><div class="liv">📦 Dépôt projet-ml-<sujet> public</div></span></label>
+</div>
+
+<h2><span class="dot" style="background:#f472b6"></span>T3 Deep Learning</h2>
+<div class="phase-meta">Semaines 27-39 · 13 semaines</div>
+<div class="weeks">
+<label class="week"><input type="checkbox" onchange="toggle(this, this.closest('label'))" data-k="ia_w_2_0"><span><span class="t">S27 · Neurones et réseaux</span><div class="d">Ch. 14 · perceptron, ReLU, sigmoïde, softmax</div><div class="liv">📦 Schéma 3→4→2 avec dimensions</div></span></label>
+<label class="week"><input type="checkbox" onchange="toggle(this, this.closest('label'))" data-k="ia_w_2_1"><span><span class="t">S28 · PyTorch (1/2)</span><div class="d">Ch. 15 · forward, loss, backward, step</div><div class="liv">📦 notebook 07_mlp_pytorch</div></span></label>
+<label class="week"><input type="checkbox" onchange="toggle(this, this.closest('label'))" data-k="ia_w_2_2"><span><span class="t">S29 · PyTorch (2/2)</span><div class="d">Régularisation, early stopping, diagnostic</div><div class="liv">📦 Comparaison MLP vs LightGBM</div></span></label>
+<label class="week"><input type="checkbox" onchange="toggle(this, this.closest('label'))" data-k="ia_w_2_3"><span><span class="t">S30 · ML vs DL sur tabulaire</span><div class="d">Lequel gagne et pourquoi</div><div class="liv">📦 Page de conclusion (réponse d'entretien)</div></span></label>
+<label class="week"><input type="checkbox" onchange="toggle(this, this.closest('label'))" data-k="ia_w_2_4"><span><span class="t">S31 · CNN (1/2)</span><div class="d">Ch. 16 · convolution, pooling, architecture</div><div class="liv">📦 Fashion-MNIST ≥ 90 %</div></span></label>
+<label class="week"><input type="checkbox" onchange="toggle(this, this.closest('label'))" data-k="ia_w_2_5"><span><span class="t">S32 · CNN (2/2)</span><div class="d">Augmentation, batch norm, ablation</div><div class="liv">📦 notebook 08_cnn + inference sur tes photos</div></span></label>
+<label class="week"><input type="checkbox" onchange="toggle(this, this.closest('label'))" data-k="ia_w_2_6"><span><span class="t">S33 · Transfer learning vision</span><div class="d">ResNet18 pré-entraîné, gel des couches</div><div class="liv">📦 ≥ 92 % sur 5 classes (plantes/objets)</div></span></label>
+<label class="week"><input type="checkbox" onchange="toggle(this, this.closest('label'))" data-k="ia_w_2_7"><span><span class="t">S34 · Déploiement d'une démo</span><div class="d">Hugging Face Spaces / Gradio</div><div class="liv">📦 Lien public dans le README</div></span></label>
+<label class="week"><input type="checkbox" onchange="toggle(this, this.closest('label'))" data-k="ia_w_2_8"><span><span class="t">S35 · Séquences : RNN/LSTM</span><div class="d">Ch. 17 · état caché, portes, séries temporelles</div><div class="liv">📦 notebook 09_sequences (série réelle)</div></span></label>
+<label class="week"><input type="checkbox" onchange="toggle(this, this.closest('label'))" data-k="ia_w_2_9"><span><span class="t">S36 · Séries temporelles en pratique</span><div class="d">Lags, saisonnalité, validation temporelle</div><div class="liv">📦 Modèle qui bat la persistance</div></span></label>
+<label class="week"><input type="checkbox" onchange="toggle(this, this.closest('label'))" data-k="ia_w_2_10"><span><span class="t">S37 · Attention</span><div class="d">Ch. 18 · Q, K, V, multi-head</div><div class="liv">📦 Schéma du bloc Transformer dessiné par toi</div></span></label>
+<label class="week"><input type="checkbox" onchange="toggle(this, this.closest('label'))" data-k="ia_w_2_11"><span><span class="t">S38 · Transformers et NLP</span><div class="d">BERT vs GPT, embeddings, pipeline HF</div><div class="liv">📦 notebook 10_embeddings</div></span></label>
+<label class="week"><input type="checkbox" onchange="toggle(this, this.closest('label'))" data-k="ia_w_2_12"><span><span class="t">S39 · Fine-tuning HF · 🏁 JALON 3</span><div class="d">Ch. 19 · Trainer, LoRA, licences</div><div class="liv">📦 Modèle multilingue fine-tuné + model card</div></span></label>
+</div>
+
+<h2><span class="dot" style="background:#34d399"></span>T4 LLM, RAG, MLOps, Carrière</h2>
+<div class="phase-meta">Semaines 40-52 · 13 semaines</div>
+<div class="weeks">
+<label class="week"><input type="checkbox" onchange="toggle(this, this.closest('label'))" data-k="ia_w_3_0"><span><span class="t">S40 · Panorama des LLM</span><div class="d">Ch. 20 · coûts, latence, local vs API</div><div class="liv">📦 choix_modele.md (3 cas chiffrés)</div></span></label>
+<label class="week"><input type="checkbox" onchange="toggle(this, this.closest('label'))" data-k="ia_w_3_1"><span><span class="t">S41 · Prompt engineering</span><div class="d">Ch. 21 · rôle, few-shot, JSON strict</div><div class="liv">📦 5 prompts pro + jeu d'évaluation 20 cas</div></span></label>
+<label class="week"><input type="checkbox" onchange="toggle(this, this.closest('label'))" data-k="ia_w_3_2"><span><span class="t">S42 · Embeddings et recherche</span><div class="d">Recherche sémantique, similarité cosinus</div><div class="liv">📦 notebook 05_llm_rag terminé</div></span></label>
+<label class="week"><input type="checkbox" onchange="toggle(this, this.closest('label'))" data-k="ia_w_3_3"><span><span class="t">S43 · RAG (1/2)</span><div class="d">Ch. 22 · chunking, index FAISS, top-k</div><div class="liv">📦 RAG fonctionnel sur tes documents</div></span></label>
+<label class="week"><input type="checkbox" onchange="toggle(this, this.closest('label'))" data-k="ia_w_3_4"><span><span class="t">S44 · RAG (2/2)</span><div class="d">Hybride, re-ranking, citations, évaluation</div><div class="liv">📦 Rapport d'évaluation sur 30 questions</div></span></label>
+<label class="week"><input type="checkbox" onchange="toggle(this, this.closest('label'))" data-k="ia_w_3_5"><span><span class="t">S45 · RAG : interface et démo</span><div class="d">Ch. 25 · Streamlit + déploiement</div><div class="liv">📦 URL publique du RAG (projet vitrine)</div></span></label>
+<label class="week"><input type="checkbox" onchange="toggle(this, this.closest('label'))" data-k="ia_w_3_6"><span><span class="t">S46 · Agents et outils</span><div class="d">Ch. 23 · function calling, ReAct, garde-fous</div><div class="liv">📦 Agent à 2-3 outils journalisé</div></span></label>
+<label class="week"><input type="checkbox" onchange="toggle(this, this.closest('label'))" data-k="ia_w_3_7"><span><span class="t">S47 · MLOps (1/2)</span><div class="d">Ch. 24 · MLflow, versioning, tests</div><div class="liv">📦 5 expériences tracées dans MLflow</div></span></label>
+<label class="week"><input type="checkbox" onchange="toggle(this, this.closest('label'))" data-k="ia_w_3_8"><span><span class="t">S48 · MLOps (2/2)</span><div class="d">Drift, surveillance, CI GitHub Actions</div><div class="liv">📦 Badge CI + rapport de dérive</div></span></label>
+<label class="week"><input type="checkbox" onchange="toggle(this, this.closest('label'))" data-k="ia_w_3_9"><span><span class="t">S49 · Déploiement</span><div class="d">API FastAPI + pydantic + Docker</div><div class="liv">📦 URL publique + /docs fonctionnelle</div></span></label>
+<label class="week"><input type="checkbox" onchange="toggle(this, this.closest('label'))" data-k="ia_w_3_10"><span><span class="t">S50 · Éthique et conformité</span><div class="d">Ch. 26 · RGPD, AI Act, OWASP LLM</div><div class="liv">📦 Model card + test d'équité par sous-groupe</div></span></label>
+<label class="week"><input type="checkbox" onchange="toggle(this, this.closest('label'))" data-k="ia_w_3_11"><span><span class="t">S51 · Carrière (1/2)</span><div class="d">CV 1 page, LinkedIn, portfolio, pitch 2 min</div><div class="liv">📦 50 entreprises ciblées + 20 messages</div></span></label>
+<label class="week"><input type="checkbox" onchange="toggle(this, this.closest('label'))" data-k="ia_w_3_12"><span><span class="t">S52 · Carrière (2/2) · 🏁 JALON FINAL</span><div class="d">Entretiens blancs, 15 questions du guide</div><div class="liv">📦 ≥ 50 candidatures envoyées</div></span></label>
+</div>
+
+<h2><span class="dot" style="background:#fbbf24"></span>Jalons de contrôle</h2>
+<div class="card" style="margin-top:16px">
+<div class="jalon"><b>Fin semaine 13</b><span>Je code sans tutoriel, je manipule des données, j'explique gradient et probabilité.<br><i style="color:#8fd7ff">3 notebooks publics</i></span></div>
+<div class="jalon"><b>Fin semaine 26</b><span>Je peux passer un test technique junior ML et justifier mes métriques.<br><i style="color:#8fd7ff">Seuil d'employabilité minimal atteint</i></span></div>
+<div class="jalon"><b>Fin semaine 39</b><span>J'écris une boucle PyTorch et j'adapte un modèle Hugging Face.<br><i style="color:#8fd7ff">Profil ML engineer junior crédible</i></span></div>
+<div class="jalon"><b>Fin semaine 50</b><span>J'ai une application déployée avec URL publique.<br><i style="color:#8fd7ff">Critère n°1 des recruteurs</i></span></div>
+<div class="jalon"><b>Fin semaine 52</b><span>J'ai un portfolio de 4 projets et je postule en volume.<br><i style="color:#8fd7ff">Candidat, plus spectateur</i></span></div>
+</div>
+
+<h2><span class="dot" style="background:#4f9cf9"></span>Ressources à ouvrir dès aujourd'hui</h2>
+<div class="grid2">
+<div class="card"><h3><a href="https://colab.research.google.com" target="_blank" rel="noopener">Google Colab ↗</a></h3><p>Coder sans rien installer, GPU gratuit</p></div>
+<div class="card"><h3><a href="https://github.com" target="_blank" rel="noopener">GitHub ↗</a></h3><p>Ton CV technique et ton historique</p></div>
+<div class="card"><h3><a href="https://www.kaggle.com/learn" target="_blank" rel="noopener">Kaggle ↗</a></h3><p>Cours courts + datasets + notebooks</p></div>
+<div class="card"><h3><a href="https://huggingface.co/learn/nlp-course" target="_blank" rel="noopener">Hugging Face ↗</a></h3><p>Cours LLM gratuit + modèles + Spaces</p></div>
+<div class="card"><h3><a href="https://scikit-learn.org/stable/user_guide.html" target="_blank" rel="noopener">scikit-learn (user guide) ↗</a></h3><p>La référence ML, très pédagogique</p></div>
+<div class="card"><h3><a href="https://www.campusfrance.org" target="_blank" rel="noopener">Campus France ↗</a></h3><p>Procédure Études en France (master)</p></div>
+<div class="card"><h3><a href="https://www.malt.fr" target="_blank" rel="noopener">Malt / Free-Work ↗</a></h3><p>Freelance francophone (revenus en €)</p></div>
+<div class="card"><h3><a href="https://zindi.africa" target="_blank" rel="noopener">Zindi ↗</a></h3><p>Compétitions data science africaines</p></div>
+<div class="card"><h3><a href="https://www.youtube.com/@AndrejKarpathy" target="_blank" rel="noopener">Andrej Karpathy ↗</a></h3><p>Comprendre les réseaux et LLM en profondeur</p></div>
+<div class="card"><h3><a href="https://aims.ac.za" target="_blank" rel="noopener">AIMS / AMMI ↗</a></h3><p>Master africain en IA, bourse, passerelle Mila</p></div>
+</div>
+
+<div class="note">
+  <b>Comment utiliser ce tableau de bord :</b> coche une semaine quand son livrable est publié (pas quand le chapitre est lu).
+  La progression est sauvegardée dans ton navigateur. Garde ce fichier ouvert chaque lundi matin — c'est ton point de contrôle hebdomadaire.
+</div>
+
+<footer>
+  Plan généré comme accompagnement du pack <i>« Devenir pro de l'IA »</i> (cours-ia/). Les checkboxes se sauvegardent localement ;
+  elles ne fonctionnent pas dans un aperçu en bac à sable — télécharge le fichier et ouvre-le dans ton navigateur pour la sauvegarde.
+</footer>
+</div>
+
+<script>
+function toggle(cb, card) {
+  card.classList.toggle("done", cb.checked);
+  try { localStorage.setItem(cb.dataset.k, cb.checked ? "1" : "0"); } catch (e) {}
+  update();
+}
+function update() {
+  var all = document.querySelectorAll('input[type=checkbox]');
+  var n = 0; all.forEach(function (c) { if (c.checked) n++; });
+  document.getElementById("compte").textContent = n + " / " + all.length + " semaines";
+  document.getElementById("pct").textContent = Math.round(n / all.length * 100) + " %";
+  document.getElementById("fill").style.width = (n / all.length * 100) + "%";
+}
+function resetAll() {
+  if (!confirm("Décocher toutes les semaines ?")) return;
+  document.querySelectorAll('input[type=checkbox]').forEach(function (c) {
+    c.checked = false; c.closest('label').classList.remove("done");
+    try { localStorage.removeItem(c.dataset.k); } catch (e) {}
+  });
+  update();
+}
+function restaurer() {
+  document.querySelectorAll('input[type=checkbox]').forEach(function (c) {
+    var v = null;
+    try { v = localStorage.getItem(c.dataset.k); } catch (e) {}
+    if (v === "1") { c.checked = true; c.closest('label').classList.add("done"); }
+  });
+  update();
+}
+document.addEventListener("DOMContentLoaded", restaurer);
+</script>
+</body>
+</html>
